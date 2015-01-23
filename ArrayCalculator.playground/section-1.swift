@@ -32,5 +32,5 @@ class TipCalculator {
     }
 }
 
-let tipCalc = TipCalculator(total:33.25, taxPct:0.06)
+let tipCalc = TipCalculator(total:33.25, taxPct:0.06)//let เรียกใช้คลาส สามารถใช้ tipCalc.a() (สมมติ)
 tipCalc.returnPossibleTips()
