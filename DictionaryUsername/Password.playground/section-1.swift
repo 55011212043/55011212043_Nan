@@ -3,29 +3,42 @@
 import UIKit
 
 class userPass {
-    let user:String
     
-    let storeUser:[String: String]=["nan":"1234","chira":"abc123","seungho":"yang1016"]
-    init(user:String){
-        self.user = user
-    }
     
-    func showPass() -> String{
-        let pass:String = " "
-        for(key,value) in storeUser {
-            if(key==user){
-                let pass=value
-                println("\(user) : \(pass)")
-            }
+    var storeUser=["nan":"1234","chira":"abc123","seungho":"yang1016"]
+    
+    
+    
+    func removeUsr(userRe:String) -> String{
+        if(storeUser[userRe] != nil){
+            storeUser[userRe]=nil
+        }else{
+            return "This data is not in storage."
         }
-        return pass
+        return userRe
     }
     
-    func updateUser(userEdited:String, passEdited:String){
-        storeUser[userEdited] = passEdited
+    func addUser(userAdd:String,passAdd:String) -> String{
+        let user:String = ""
+        for(key,value) in storeUser {
+            let user=key
+        }
+        if(userAdd != storeUser[user]){
+            storeUser[userAdd]=passAdd
+        }else{
+            return "This data is Exist."
+        }
+        return userAdd
+    }
+    
+    func showData(){
+        
+        println(storeUser)
+       
     }
 }
-let show = userPass(user: "nan")
+let show = userPass()
+show.removeUsr("nan")
+show.addUser("jjjjj", passAdd: "555")
 
-show.showPass()
-show.updateUser("nan",)
+show.showData()
