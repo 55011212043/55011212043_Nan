@@ -23,6 +23,7 @@ class ViewController: UIViewController,UINavigationControllerDelegate,UIImagePic
     
     @IBOutlet var imageView: UIImageView!
     
+    
     @IBAction func takePhoto(sender: AnyObject) {
         imagePicker.allowsEditing = false
         imagePicker.sourceType = .Camera
@@ -31,6 +32,9 @@ class ViewController: UIViewController,UINavigationControllerDelegate,UIImagePic
         
         newMedia = true
     }
+    
+    
+    
     @IBAction func library(sender: AnyObject) {
         imagePicker.allowsEditing = false
         imagePicker.sourceType = .PhotoLibrary
@@ -39,11 +43,6 @@ class ViewController: UIViewController,UINavigationControllerDelegate,UIImagePic
         
         newMedia = false
     }
-    /*@IBAction func libraries(sender: AnyObject) {
-        let pickerC = UIImagePickerController()
-        pickerC.delegate = self
-        self.presentViewController(pickerC, animated: true, completion: nil)
-    }*/
     
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [NSObject : AnyObject]) {
         dismissViewControllerAnimated(true, completion: nil)
@@ -60,16 +59,19 @@ class ViewController: UIViewController,UINavigationControllerDelegate,UIImagePic
             imageView.image = image
             
             if(newMedia == true){
-                UIImageWriteToSavedPhotosAlbum(image, self, "image: didFinishSaveingWithError: contextInfo:", nil)
+                UIImageWriteToSavedPhotosAlbum(image, self, "image: didFinishSavingWithError: contextInfo:", nil)
             }
         }
         
     }
     
-    func image(image: UIImage,didFinishSaveingWithError error: NSErrorPointer, contextInfo:UnsafePointer<Void>){
+    func image(image: UIImage,didFinishSavingWithError error: NSErrorPointer, contextInfo:UnsafePointer<Void>){
         if(error != nil){
             let alert = UIAlertController(title: "Save Failed", message: "Failed to save image", preferredStyle: UIAlertControllerStyle.Alert)
             let cancelAction = UIAlertAction(title: "OK", style: .Cancel, handler: nil)
+            
+            alert.addAction(cancelAction)
+            self.presentViewController(alert, animated: true, completion: nil)
         }
     }
     @IBAction func sliderChange(sender: UISlider) {
@@ -118,10 +120,6 @@ class ViewController: UIViewController,UINavigationControllerDelegate,UIImagePic
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        imagePicker = UIImagePickerController()
-        imagePicker.delegate = self
-        
-       
         
         filter = CIFilter(name: "CISepiaTone")
         filter.setValue(beginImage, forKey: kCIInputImageKey)
@@ -129,7 +127,9 @@ class ViewController: UIViewController,UINavigationControllerDelegate,UIImagePic
         let outputImage = filter.outputImage
         
         context = CIContext(options: nil)
-                
+        
+        imagePicker = UIImagePickerController()
+        imagePicker.delegate = self        
         // Do any additional setup after loading the view, typically from a nib.
     }
     
