@@ -55,19 +55,21 @@ class ViewController: UIViewController, UITableViewDataSource {
     }
     
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+        
+    
+        let appDel:AppDelegate=UIApplication.sharedApplication().delegate as AppDelegate
+        
+        let context:NSManagedObjectContext=appDel.managedObjectContext!
         if editingStyle == UITableViewCellEditingStyle.Delete {
+            
+            context.deleteObject(items[indexPath.row] as NSManagedObject)
             items.removeAtIndex(indexPath.row)
+            context.save(nil)
+
             tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
         }
     }
     
-    /*func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath){
-        let alert = UIAlertController(title: "Item selected", message: "You selected item \(indexPath.row)", preferredStyle: UIAlertControllerStyle.Alert)
-        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: {
-            (alert: UIAlertAction!) in println("An alert of type \(alert.style.hashValue) was tapped!")
-        }))
-        self.presentViewController(alert, animated: true, completion: nil)
-    }*/
     
     func saveName(name: String){
        
@@ -95,6 +97,28 @@ class ViewController: UIViewController, UITableViewDataSource {
     
     override func viewWillAppear(animated: Bool) {////ดึงข้อมูลออกมา
         super.viewWillAppear(animated)
+        
+        //1
+        let appDelegate = UIApplication.sharedApplication().delegate as AppDelegate
+        let managedContext = appDelegate.managedObjectContext!
+        
+        //2
+        let fetchRequest = NSFetchRequest(entityName: "Item")
+        
+        //3
+        var error: NSError?
+        
+        let fetchedResults = managedContext.executeFetchRequest(fetchRequest, error: &error) as [NSManagedObject]?
+        
+        if let result = fetchedResults{
+            items = result
+        }else{
+            println("Could not fetch \(error),\(error!.userInfo)")
+        }
+    }
+    
+    override func viewDidDisappear(animated: Bool) {
+        super.viewDidDisappear(animated)
         
         //1
         let appDelegate = UIApplication.sharedApplication().delegate as AppDelegate
